@@ -1,5 +1,5 @@
 -- ALBUM TABLE --
-CREATE TABLE IF NOT EXISTS chinook.chinook_album AS
+CREATE TABLE IF NOT EXISTS chinook.chinook_raw.album AS
 SELECT *
 FROM read_files(
     '/Volumes/ftw/chinook/ftw-b12-de/shared/week05/chinook_csv/Album.csv',
