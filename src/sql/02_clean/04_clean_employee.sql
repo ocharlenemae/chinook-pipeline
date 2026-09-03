@@ -1,5 +1,5 @@
 -- EMPLOYEE TABLE --
-CREATE OR REPLACE TABLE IF NOT EXISTS chinook.chinook_clean.employee AS
+CREATE OR REPLACE TABLE chinook.chinook_clean.employee AS
 SELECT 
     -- Cleaned employee directory with formatted dates, addresses, and phone numbers
     CAST(EmployeeId AS INT) AS employee_id,     -- Primary key
