@@ -1,10 +1,10 @@
-# 🎵 Chinook Data Pipeline — Architecture Documentation
+# 🎵 Chinook Data Pipeline Architecture
 
 ## Overview
 
 This document describes the **layered architecture** of the Chinook data pipeline, following the **Bronze → Silver → Gold** (Medallion) design pattern. Each layer represents a stage of data refinement, moving from raw ingested data to clean, structured data, and finally to business-ready analytical models.
 
-![Chinook Pipeline Architecture](images/chinook-architecture.png)
+![Chinook Pipeline Architecture](chinook-architecture.png)
 ---
 
 ## Data Source
