@@ -1,5 +1,5 @@
 -- MEDIA TYPE TABLE --
-CREATE OR REPLACE TABLE IF EXISTS chinook.chinook_clean.media_type AS
+CREATE OR REPLACE TABLE chinook.chinook_clean.media_type AS
 SELECT 
     -- Cleaned media format lookup table
     CAST(MediaTypeId AS INT) AS media_type_id,     -- Primary key
