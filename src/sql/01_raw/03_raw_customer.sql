@@ -1,5 +1,5 @@
 -- CUSTOMER TABLE --
-CREATE TABLE IF NOT EXISTS chinook.chinook_customer AS
+CREATE TABLE IF NOT EXISTS chinook.chinook_raw.customer AS
 SELECT *
 FROM read_files(
     '/Volumes/ftw/chinook/ftw-b12-de/shared/week05/chinook_csv/Customer.csv',
