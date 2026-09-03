@@ -1,6 +1,6 @@
 -- TOP REVENUE BY GENRE PER COUNTRY -- 
 -- Identify the top revenue-generating genres per country. --
-CREATE OR REPLACE TABLE top_genre_by_country_mv AS
+CREATE OR REPLACE TABLE chinook.chinook_visualization.top_genre_by_country_mv AS
 WITH ranked_genres AS (
     SELECT
         c.country,                                                 
