@@ -1,6 +1,6 @@
 -- CUSTOMER SPENDING SEGMENTATION -- 
 -- Categorizes customers into spending tiers (High: >$50, Medium: $20-$50, Low: <$20) and counts total customers per tier. --
-CREATE OR REPLACE TABLE customer_spending_segmentation_mv AS
+CREATE OR REPLACE TABLE chinook.chinook_visualization.customer_spending_segmentation_mv AS
 WITH customer_totals AS (
     SELECT
         customer_id,
