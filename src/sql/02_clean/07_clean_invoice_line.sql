@@ -1,5 +1,5 @@
 -- INVOICE LINE TABLE --
-CREATE OR REPLACE TABLE IF EXISTS chinook.chinook_clean.invoice_line AS
+CREATE OR REPLACE TABLE chinook.chinook_clean.invoice_line AS
 SELECT 
     -- Cleaned invoice line table with calculated line item amounts
     CAST(InvoiceLineId AS INT) AS invoice_line_id,     -- Primary key
