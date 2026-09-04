@@ -7,7 +7,7 @@ SELECT
     COALESCE(TRIM(Company), 'Unknown') AS company,
     REGEXP_REPLACE(Address, '[.,]', '') AS customer_address,
     TRIM(City) AS customer_city,
-    COALESCE(TRIM(State), 'Unknown') AS company, AS customer_state,
+    COALESCE(TRIM(State), 'Unknown') AS customer_state,
     TRIM(Country) AS customer_country,
     COALESCE(UPPER(TRIM(PostalCode)), 'Unknown') AS customer_postal_code,
     CONCAT('+', REGEXP_REPLACE(Phone, '[^0-9]', '')) AS customer_phone,
