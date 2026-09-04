@@ -32,10 +32,10 @@ SELECT
   f.customer_id,
   f.employee_id,
   f.date_key,
-  (t.track_id IS NULL)    AS is_missing_track,
+  (t.track_id IS NULL) AS is_missing_track,
   (c.customer_id IS NULL) AS is_missing_customer,
   (e.employee_id IS NULL) AS is_missing_employee,
-  (d.date_key IS NULL)    AS is_missing_date
+  (d.date_key IS NULL) AS is_missing_date
 FROM chinook.chinook_mart.fact_invoice_line AS f
 LEFT JOIN chinook.chinook_mart.dim_track AS t 
   ON f.track_id = t.track_id
@@ -56,10 +56,10 @@ Ensures all primary keys in dimension tables are strictly 100% unique and non-nu
 ```sql
 -- Track Dimension PK Check
 SELECT 
-  'chinook.chinook_mart.dim_track' AS table_name,
+  'dim_track' AS table_name,
   track_id AS primary_key,
   COUNT(*) AS key_count
-FROM ftw.chinook.dim_track
+FROM chinook.chinook_mart.dim_track
 GROUP BY track_id
 HAVING COUNT(*) > 1 OR track_id IS NULL
 
@@ -67,10 +67,10 @@ UNION ALL
 
 -- Customer Dimension PK Check
 SELECT 
-  'chinook.chinook_mart.dim_customer' AS table_name,
+  'dim_customer' AS table_name,
   customer_id AS primary_key,
   COUNT(*) AS key_count
-FROM ftw.chinook.dim_customer
+FROM chinook.chinook_mart.dim_customer
 GROUP BY customer_id
 HAVING COUNT(*) > 1 OR customer_id IS NULL
 
@@ -78,10 +78,10 @@ UNION ALL
 
 -- Employee Dimension PK Check
 SELECT 
-  'chinook.chinook_mart.dim_employee' AS table_name,
+  'dim_employee' AS table_name,
   employee_id AS primary_key,
   COUNT(*) AS key_count
-FROM ftw.chinook.dim_employee
+FROM chinook.chinook_mart.dim_employee
 GROUP BY employee_id
 HAVING COUNT(*) > 1 OR employee_id IS NULL
 
@@ -89,16 +89,16 @@ UNION ALL
 
 -- Date Dimension PK Check
 SELECT 
-  'chinook.chinook_mart.dim_date' AS table_name,
+  'dim_date' AS table_name,
   date_key AS primary_key,
   COUNT(*) AS key_count
-FROM ftw.chinook.dim_date
+FROM chinook.chinook_mart.dim_date
 GROUP BY date_key
 HAVING COUNT(*) > 1 OR date_key IS NULL;
 ```
 
 ### CROSS-LAYER METRIC RECONCILIATION
-Compares total revenue and record counts between the cleaned Silver layer (`chinook_clean.invoice_line`) and the Gold layer (`chinook_mart.fact_invoice_line`) to detect data loss.
+Compares total revenue and record counts between the cleaned Silver layer (`invoice_line`) and the Gold layer (`fact_invoice_line`) to detect data loss.
 
 ```sql
 WITH silver_metrics AS (
@@ -111,7 +111,7 @@ gold_metrics AS (
   SELECT 
     ROUND(SUM(total_revenue), 2) AS gold_total_revenue,
     COUNT(invoice_line_id) AS gold_line_count
-  FROM chinook.chinook_clean.fact_invoice_line
+  FROM chinook.chinook_mart.fact_invoice_line
 )
 SELECT 
   s.silver_total_revenue,
