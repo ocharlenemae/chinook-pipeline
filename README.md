@@ -18,7 +18,11 @@ This analysis intends to inform the music store operations based on regional sal
   - **...**
 
 ## Project Architecture and Structure
-This pipeline uses the Medallion Architecture, implementing the following layers: Bronze for data extraction, Silver for data cleaning, and Gold for dimensional modelling and visualization. \
+This pipeline follows the **Medallion Architecture** (Bronze → Silver → Gold) hosted on Databricks with Unity Catalog governance:
+* **Bronze (`01_raw`):** Ingests raw CSV source data from Cloudflare R2 object storage into Databricks using `read_files()` with zero transformation.
+* **Silver (`02_clean`):** Cleans, standardizes, casts data types, and enforces data quality constraints.
+* **Gold (`03_mart`):** Models clean data into a dimensional star schema (`dim_*` and `fact_*`) optimized for analytics.
+* **Visualization (`04_visualization`):** Aggregates Gold layer models into business intelligence views for dashboards. \
 See [`docs/architecture.md`](docs/architecture.md) for an in-depth explanation of the architecture.
 ```text
 ├── docs/
@@ -40,14 +44,17 @@ See [`docs/architecture.md`](docs/architecture.md) for an in-depth explanation o
 ## Data Model
 The pipeline uses a star schema focusing on the customer, date, employee, and track dimensions. \
 See [`docs/data-model.md`](docs/data-model.md) for  column-level descriptions and the exact star diagram.
-- **Dimensions (dim_*)**
-  - dim_customer - customer attributes and corresponding employee
-  - dim_date - date key
-  - dim_employee - employee attributes
-  - dim_track - track/album/artist attributes used for joins and filtering
-- **Fact table**
-  - fact_invoice_line - grain: one row per invoice line.\
-   This is the primary fact used by the visualization queries.
+* **Fact Table (`fact_*`)**
+  * **`fact_invoice_line`** *(Grain: 1 row per line-item purchase on an invoice)*
+    * **Primary Key:** `invoice_line_id`
+    * **Foreign Keys:** `customer_id`, `track_id`, `employee_id`, `date_key`
+    * **Measures:** `quantity`, `unit_price`, `line_amount`
+
+* **Dimension Tables (`dim_*`)**
+  * **`dim_customer`** — Customer attributes, contact details, and location data.
+  * **`dim_track`** — Track attributes including associated album, artist, genre, and media type.
+  * **`dim_employee`** — Employee titles and hierarchy (links to `dim_customer` as support representatives).
+  * **`dim_date`** — Calendar lookup dimension (`date`, `month_and_year`, `year_and_quarter`) for time-series analysis.
 
 
 ## How to Run
@@ -86,16 +93,18 @@ See [`docs/data-model.md`](docs/data-model.md) for  column-level descriptions an
 
 
 ## Validation
+Data quality is enforced using a **dual-layered framework** across Silver and Gold layers to prevent malformed records and ensure mathematical accuracy. \
 For a complete rundown of the validation checks, refer to [`docs/validation.md`](docs/validation.md).
 
-**Key Checks**
-- **Primary keys:** no NULLs in cleaned primary key columns (e.g., customer_id, invoice_id).
-- **Types & formatting:** type casting and string normalization were applied.
-- **Uniqueness:** dimension keys are unique.
-- **Referential integrity:** every fact foreign key matches a dimension row.
-- **Reconciliation:** invoice totals match the sum of invoice line amounts.
-- **Date coverage:** all invoice dates are present in the date dimension.
-- **Basic data-quality thresholds:** no negative/zero quantities or unit prices.
+### 1. Data Hygiene (Silver Layer)
+* **Primary Key Non-Null:** Ensures critical entity IDs (`customer_id`, `invoice_id`, `track_id`) are populated.
+* **Domain & Type Enforcement:** Casts data types, standardizes string casing (`INITCAP`), and filters non-positive prices or quantities.
+* **Null Imputation:** Assigns fallback defaults (`'Unknown'`) for non-critical descriptive text.
+
+### 2. Business Rule & Audit Checks (Gold Layer)
+* **Dimension Uniqueness:** Guarantees primary key uniqueness (`COUNT(DISTINCT) == COUNT(*)`) and non-null values across all `dim_*` tables.
+* **Referential Integrity:** Runs `LEFT JOIN` checks between `fact_invoice_line` and dimensions to flag unmapped foreign keys.
+* **Cross-Layer Reconciliation:** Validates zero data loss by comparing total revenue and line counts between `chinook_clean` (Silver) and `chinook_mart` (Gold).
 
 
 ## Decisions
