@@ -36,14 +36,14 @@ SELECT
   (c.customer_id IS NULL) AS is_missing_customer,
   (e.employee_id IS NULL) AS is_missing_employee,
   (d.date_key IS NULL)    AS is_missing_date
-FROM ftw.chinook.fact_invoice_line AS f
-LEFT JOIN ftw.chinook.dim_track AS t 
+FROM chinook.chinook_mart.fact_invoice_line AS f
+LEFT JOIN chinook.chinook_mart.dim_track AS t 
   ON f.track_id = t.track_id
-LEFT JOIN ftw.chinook.dim_customer AS c 
+LEFT JOIN chinook.chinook_mart.dim_customer AS c 
   ON f.customer_id = c.customer_id
-LEFT JOIN ftw.chinook.dim_employee AS e 
+LEFT JOIN chinook.chinook_mart.dim_employee AS e 
   ON f.employee_id = e.employee_id
-LEFT JOIN ftw.chinook.dim_date AS d 
+LEFT JOIN chinook.chinook_mart.dim_date AS d 
   ON f.date_key = d.date_key
 WHERE t.track_id IS NULL
    OR c.customer_id IS NULL
