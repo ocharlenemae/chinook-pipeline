@@ -2,7 +2,7 @@
 
 
 ## Star Schema Design
-(Insert Star Schema Image)
+<img src="../Day 5_Star Schema.png" alt="Star Schema" width="600">
 
 ## Fact Table
 **fact_invoice_line**
