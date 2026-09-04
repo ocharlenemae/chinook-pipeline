@@ -1,12 +1,9 @@
 # chinook-pipeline
--------
 ## Project Overview
--------
 End-to-end data pipeline for analyzing the Chinook dataset on Databricks using a medallion architecture (bronze/raw → silver/clean → gold/dimensional). Implements a star schema and provides SQL queries used for BI visualizations. \
 This analysis intends to inform the music store operations based on regional sales performance, and customer behavior and preferences.
 
 ## Key Findings
--------
 - **100%** of customers were classified as **Medium-tier** spenders.  
 - **Chile** has the highest regional average price per unit: **$1.23**.  
 - **USA** generates the **most revenue by genre**.  
@@ -21,7 +18,6 @@ This analysis intends to inform the music store operations based on regional sal
   - **...**
 
 ## Project Architecture and Structure
--------
 This pipeline uses the Medallion Architecture, implementing the following layers: Bronze for data extraction, Silver for data cleaning, and Gold for dimensional modelling and visualization. \
 See [`docs/architecture.md`](docs/architecture.md) for an in-depth explanation of the architecture.
 ```text
@@ -42,7 +38,6 @@ See [`docs/architecture.md`](docs/architecture.md) for an in-depth explanation o
 
 
 ## Data Model
--------
 The pipeline uses a star schema focusing on the customer, date, employee, and track dimensions. \
 See [`docs/data-model.md`](docs/data-model.md) for  column-level descriptions and the exact star diagram.
 - **Dimensions (dim_*)**
@@ -56,7 +51,6 @@ See [`docs/data-model.md`](docs/data-model.md) for  column-level descriptions an
 
 
 ## How to Run
--------
 **Prerequisites**
 - Databricks workspace or any Spark SQL-capable environment.
 - Access to Chinook source files or a source database.
@@ -92,7 +86,6 @@ See [`docs/data-model.md`](docs/data-model.md) for  column-level descriptions an
 
 
 ## Validation
--------
 For a complete rundown of the validation checks, refer to [`docs/validation.md`](docs/validation.md).
 
 **Key Checks**
@@ -106,7 +99,6 @@ For a complete rundown of the validation checks, refer to [`docs/validation.md`]
 
 
 ## Decisions
--------
 To ensure data integrity throughout the Bronze → Silver → Gold pipeline, clear transformations were applied during the cleaning phase. A full breakdown of the decisions can be found in [`docs/decisions.md`](docs/decisions.md).
 
 ### Decisions Summary 
