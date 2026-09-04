@@ -6,7 +6,7 @@ Data quality is enforced across a dual-layered framework. Applying data hygiene 
 ---
 
 ## Data Hygiene (Silver Layer)
-- Convert raw text into correct physical formats (e.g., text timestamps to `Date`, numeric strings to `Double`/`Integer`).
+- Convert raw text into correct physical formats (e.g., text timestamps to `Date`, numeric strings to `Integer`).
 - Strip leading/trailing whitespace, remove invalid characters, and enforce consistent casing (`UPPERCASE` or `INITCAP`).
 - Confirm numbers make business sense by filtering out invalid values like *zero or negative prices*, *negative quantities*, or *future transaction dates*.
 - Replace `NULL` values in non-critical descriptive fields with a standard default marker (`'Unknown'`).
@@ -98,19 +98,19 @@ HAVING COUNT(*) > 1 OR date_key IS NULL;
 ```
 
 ### CROSS-LAYER METRIC RECONCILIATION
-Compares total revenue and record counts between the cleaned Silver layer (chinook_clean.invoice_line) and the Gold layer (chinook_mart.fact_invoice_line) to detect data loss.
+Compares total revenue and record counts between the cleaned Silver layer (`chinook_clean.invoice_line`) and the Gold layer (`chinook_mart.fact_invoice_line`) to detect data loss.
 
 ```sql
 WITH silver_metrics AS (
   SELECT 
     ROUND(SUM(line_amount), 2) AS silver_total_revenue,
-    COUNT(invoice_line_id)     AS silver_line_count
+    COUNT(invoice_line_id) AS silver_line_count
   FROM chinook.chinook_clean.invoice_line
 ),
 gold_metrics AS (
   SELECT 
     ROUND(SUM(total_revenue), 2) AS gold_total_revenue,
-    COUNT(invoice_line_id)       AS gold_line_count
+    COUNT(invoice_line_id) AS gold_line_count
   FROM chinook.chinook_clean.fact_invoice_line
 )
 SELECT 
@@ -119,7 +119,7 @@ SELECT
   (s.silver_total_revenue - g.gold_total_revenue) AS revenue_difference,
   s.silver_line_count,
   g.gold_line_count,
-  (s.silver_line_count - g.gold_line_count)       AS count_difference,
+  (s.silver_line_count - g.gold_line_count) AS count_difference,
   CASE 
     WHEN s.silver_total_revenue = g.gold_total_revenue 
      AND s.silver_line_count = g.gold_line_count 
